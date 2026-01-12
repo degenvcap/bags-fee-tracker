@@ -1,82 +1,184 @@
-\# 🎯 Bags Auto Fee Tracker
+# 🎯 Bags Fee Tracker
 
+Automatically track and monitor fee claims from Bags tokens on Solana. A sleek, real-time dashboard for tracking fee receivers and their claim history.
 
+![Bags Fee Tracker](https://img.shields.io/badge/status-live-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
 
-Automatically track fee claims from Bags tokens on Solana.
+## 🌐 Live Demo
 
+**[https://bags-tracker.vercel.app](https://bags-tracker.vercel.app)**
 
+---
 
-\## 🚀 Features
+## ✨ Features
 
+- 🔍 **Track Fee Receivers** - Search any Bags token by mint address
+- 💰 **Real-time Monitoring** - Monitor WSOL/SOL fee claims as they happen
+- 📊 **Claim Analytics** - View complete claim history with timestamps and amounts
+- 🎨 **Modern UI** - Clean, compact interface with dark mode
+- 🚀 **Fast & Reliable** - Built on Solana with Helius RPC for speed
+- 🔗 **Social Integration** - Direct links to receiver Twitter profiles with avatars
 
+---
 
-\- Track fee receivers for any Bags token
+## 🛠️ Tech Stack
 
-\- Monitor real-time WSOL/SOL fee claims
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | HTML, CSS, JavaScript |
+| **Backend** | Node.js, Express |
+| **Blockchain** | Solana (Helius RPC) |
+| **APIs** | Bags API, Helius, Jupiter |
+| **Deployment** | Vercel (Serverless) |
 
-\- View complete claim history with timestamps
+---
 
-\- Clean dark mode UI
+## 📦 Quick Start
 
-\- Deployed on Vercel
+### Prerequisites
 
+- Node.js (v16 or higher)
+- Helius API key ([Get one here](https://helius.dev))
+- Bags API key (Get from [Bags.fm](https://bags.fm))
 
+### Installation
 
-\## 🛠️ Tech Stack
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/degenvcap/bags-fee-tracker.git
+   cd bags-fee-tracker
+   ```
 
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
+3. **Set up environment variables**
 
-\- \*\*Frontend:\*\* HTML, CSS, JavaScript
+   Create a `.env` file in the root directory:
+   ```bash
+   cp .env.example .env
+   ```
 
-\- \*\*Backend:\*\* Node.js, Express
+   Then edit `.env` and add your API keys:
+   ```env
+   HELIUS_API_KEY=your_helius_api_key_here
+   BAGS_API_KEY=your_bags_api_key_here
+   ```
 
-\- \*\*Blockchain:\*\* Solana (via Helius RPC)
+4. **Run the server**
+   ```bash
+   node server.js
+   ```
 
-\- \*\*APIs:\*\* Bags API, Solana RPC
+5. **Open the app**
 
-\- \*\*Hosting:\*\* Vercel (Serverless)
+   Open `index.html` in your browser or visit `http://localhost:3001`
 
+---
 
+## 🎮 Usage
 
-\## 📦 Local Setup
+1. **Enter a token mint address** in the search box
+2. **Click "Find Receivers"** to see all fee receivers
+3. **Track receivers** to monitor their claims
+4. **View claim history** by expanding the claims section
+5. **Check for new claims** anytime with the "Check" button
 
+---
 
+## 📝 Environment Variables
 
-1\. Clone the repo
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `HELIUS_API_KEY` | Your Helius RPC API key | ✅ Yes |
+| `BAGS_API_KEY` | Your Bags.fm API key | ✅ Yes |
 
-2\. Install dependencies: `npm install`
+Get your API keys:
+- **Helius**: [https://helius.dev](https://helius.dev)
+- **Bags**: Contact [Bags.fm](https://bags.fm)
 
-3\. Create `.env` file (see `.env.example`)
+---
 
-4\. Run: `node server.js`
+## 🚀 Deployment
 
-5\. Open `index.html` in browser
+This project is configured for **Vercel** deployment:
 
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run: `vercel`
+3. Set environment variables in Vercel dashboard
+4. Deploy: `vercel --prod`
 
+The `vercel.json` configuration is already included.
 
-\## 🌐 Live Demo
+---
 
+## 🎨 Features Breakdown
 
+### Compact Dashboard
+- Single-line receiver rows showing all key stats
+- Inline display of Fee Split, Claimed, Unclaimed, and Claim Count
+- Collapsible transaction history
 
-https://bags-tracker.vercel.app
+### Token Metadata
+- Automatic fetching of token name, symbol, and logo
+- Uses Helius metadata API with Jupiter fallback
+- Profile images from Bags API
 
+### Claim Tracking
+- Monitors the last 50 transactions per wallet
+- Detects SOL balance changes from fee claims
+- Timestamps for every claim transaction
+- Direct links to Solscan for verification
 
+---
 
-\## 📝 Environment Variables
+## 📂 Project Structure
 
+```
+bags-fee-tracker/
+├── index.html          # Frontend UI
+├── server.js           # Backend API server
+├── package.json        # Dependencies
+├── vercel.json         # Vercel config
+├── .env.example        # Environment template
+├── .gitignore          # Git ignore rules
+└── README.md           # This file
+```
 
+---
 
-See `.env.example` for required variables:
+## 🔒 Security
 
-\- `HELIUS\_API\_KEY` - Get from https://helius.dev
+- ✅ API keys stored in environment variables
+- ✅ `.env` excluded from version control
+- ✅ No hardcoded credentials
+- ✅ Rate limiting implemented
+- ✅ Safe for public repositories
 
-\- `BAGS\_API\_KEY` - Get from Bags.fm
+---
 
+## 📄 License
 
+MIT License - feel free to use this project however you'd like!
 
-\## 📄 License
+---
 
+## 🙏 Credits
 
+Built with:
+- [Bags.fm](https://bags.fm) - Fee sharing protocol
+- [Helius](https://helius.dev) - Solana RPC & APIs
+- [Jupiter](https://jup.ag) - Token metadata
+- [Vercel](https://vercel.com) - Deployment
 
-MIT
+---
 
+## 📞 Support
+
+Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/degenvcap/bags-fee-tracker/issues).
+
+---
+
+**Made with 💚 by [@degenvcap](https://github.com/degenvcap)**
