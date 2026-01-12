@@ -3,350 +3,476 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bags Auto Fee Tracker</title>
+    <title>BAGS FEE TRACKER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #0a0e27;
-            color: #e4e4e7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0b;
+            color: #d4d4d8;
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.5;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .card {
-            background: #1a1f3a;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid #2a2f4a;
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
         }
-        h1 { 
-            color: #818cf8; 
-            margin-bottom: 10px; 
-            font-size: 32px;
-            font-weight: 700;
+
+        /* Header */
+        .header {
+            margin-bottom: 24px;
+            border-bottom: 1px solid #1a1a1c;
+            padding-bottom: 16px;
         }
-        h2 { 
-            color: #e4e4e7; 
-            margin-bottom: 20px; 
-            font-size: 24px;
-            font-weight: 600;
-        }
-        h3 { 
-            color: #a5b4fc; 
-            margin-bottom: 15px; 
+        h1 {
+            color: #74d856;
             font-size: 18px;
-            font-weight: 600;
-        }
-        p { color: #9ca3af; margin-bottom: 20px; }
-        .input-group { margin-bottom: 20px; }
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600; 
-            color: #e4e4e7;
-            font-size: 14px;
-        }
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #2a2f4a;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            background: #0f1229;
-            color: #e4e4e7;
-            transition: all 0.2s;
-        }
-        input:focus { 
-            outline: none; 
-            border-color: #818cf8;
-            background: #1a1f3a;
-        }
-        input::placeholder {
-            color: #52525b;
-        }
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-            color: white;
-        }
-        .btn-primary:hover { 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.4);
-        }
-        .btn-primary:disabled {
-            background: #3f3f46;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .btn-secondary {
-            background: #27273a;
-            color: #e4e4e7;
-            border: 1px solid #3f3f46;
-        }
-        .btn-secondary:hover { 
-            background: #2f2f42;
-            border-color: #52525b;
-        }
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-        }
-        .btn-danger:hover { 
-            background: #b91c1c;
-        }
-        .error {
-            background: rgba(220, 38, 38, 0.1);
-            border: 1px solid #dc2626;
-            color: #fca5a5;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        .success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid #22c55e;
-            color: #86efac;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        .creator-item {
-            background: #0f1229;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #2a2f4a;
-            transition: all 0.2s;
-        }
-        .creator-item:hover {
-            border-color: #3f3f46;
-            background: #151834;
-        }
-        .creator-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-        }
-        .creator-info { flex: 1; }
-        .creator-name { 
-            font-weight: 600; 
-            color: #e4e4e7; 
-            margin-bottom: 6px;
-            font-size: 16px;
-        }
-        .creator-wallet {
-            font-family: 'Monaco', monospace;
-            font-size: 12px;
-            color: #71717a;
-            word-break: break-all;
-        }
-        .tracked-item {
-            background: #0f1229;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            border: 1px solid #2a2f4a;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .status-claimed {
-            background: rgba(34, 197, 94, 0.15);
-            color: #86efac;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-        .status-pending {
-            background: rgba(251, 191, 36, 0.15);
-            color: #fcd34d;
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-        .rate-limit {
-            background: #0f1229;
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 1px solid #2a2f4a;
-        }
-        .rate-limit-number {
-            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
         }
-        .token-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-family: 'Monaco', monospace;
-            margin-left: 8px;
-            font-weight: 600;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .stat-box {
-            background: #1a1f3a;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid #2a2f4a;
-        }
-        .stat-label {
+        .subtitle {
+            color: #71717a;
             font-size: 12px;
-            color: #9ca3af;
-            margin-bottom: 8px;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        /* Panel */
+        .panel {
+            background: #0f0f10;
+            border: 1px solid #1a1a1c;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            padding: 0;
+            overflow: hidden;
         }
-        
-        /* Simplified claim list */
-        .claims-list {
-            margin-top: 20px;
-        }
-        .claim-row {
+
+        .panel-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #1a1a1c;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
-            background: #1a1f3a;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #71717a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .panel-body {
+            padding: 16px;
+        }
+
+        /* Search Section */
+        .search-section {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #1a1a1c;
             border-radius: 8px;
-            margin-bottom: 8px;
-            border: 1px solid #2a2f4a;
+            background: #0a0a0b;
+            color: #d4d4d8;
+            font-size: 13px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-weight: 500;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #74d856;
+        }
+        input::placeholder {
+            color: #3f3f46;
+            font-weight: 400;
+        }
+
+        /* Buttons */
+        button {
+            padding: 10px 20px;
+            border: 1px solid #1a1a1c;
+            border-radius: 8px;
+            background: #0a0a0b;
+            color: #d4d4d8;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Inter', sans-serif;
             transition: all 0.2s;
         }
+        .btn-primary {
+            background: #74d856;
+            color: #0a0a0b;
+            border-color: #74d856;
+        }
+        .btn-primary:hover {
+            background: #5fb841;
+            border-color: #5fb841;
+        }
+        .btn-secondary {
+            border-color: #1a1a1c;
+        }
+        .btn-secondary:hover {
+            background: #1a1a1c;
+            border-color: #27272a;
+        }
+        .btn-danger {
+            background: transparent;
+            color: #ef4444;
+            border-color: #ef4444;
+            padding: 8px 14px;
+            font-size: 11px;
+        }
+        .btn-danger:hover {
+            background: #ef4444;
+            color: #0a0a0b;
+        }
+        .btn-expand {
+            background: transparent;
+            color: #74d856;
+            border: 1px solid #74d856;
+            padding: 6px 14px;
+            font-size: 10px;
+        }
+        .btn-expand:hover {
+            background: rgba(116, 216, 86, 0.1);
+        }
+
+        /* Messages */
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            color: #fca5a5;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .success {
+            background: rgba(116, 216, 86, 0.1);
+            border: 1px solid #74d856;
+            border-radius: 8px;
+            color: #74d856;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 600;
+            color: #71717a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 10px;
+            border-bottom: 1px solid #1a1a1c;
+        }
+        .data-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #1a1a1c;
+            color: #d4d4d8;
+            font-weight: 500;
+        }
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        .data-table tr:hover {
+            background: #0a0a0b;
+        }
+
+        /* Profile Images */
+        .profile-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #1a1a1c;
+            object-fit: cover;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        /* Token Header */
+        .token-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #0a0a0b;
+            border: 1px solid #1a1a1c;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        .token-logo {
+            width: 40px;
+            height: 40px;
+            background: #1a1a1c;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .token-info { flex: 1; }
+        .token-ticker {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .token-name {
+            font-size: 11px;
+            color: #71717a;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .token-address {
+            font-size: 10px;
+            color: #52525b;
+            font-family: 'Monaco', monospace;
+        }
+
+        /* Compact Receiver Row */
+        .receiver-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto auto;
+            gap: 16px;
+            align-items: center;
+            padding: 12px 16px;
+            background: #0f0f10;
+            border: 1px solid #1a1a1c;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .receiver-row:hover {
+            background: #0a0a0b;
+        }
+
+        .receiver-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .receiver-profile-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #27272a;
+            object-fit: cover;
+        }
+        .receiver-username {
+            font-weight: 600;
+            color: #d4d4d8;
+            font-size: 13px;
+        }
+        .receiver-username a {
+            color: #74d856;
+            text-decoration: none;
+        }
+        .receiver-username a:hover {
+            text-decoration: underline;
+        }
+        .receiver-wallet {
+            font-family: 'Monaco', monospace;
+            font-size: 10px;
+            color: #52525b;
+        }
+
+        .receiver-stats {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .receiver-stat {
+            text-align: center;
+        }
+        .receiver-stat-label {
+            font-size: 9px;
+            color: #52525b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .receiver-stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Monaco', monospace;
+            color: #d4d4d8;
+        }
+        .receiver-stat-value.claimed {
+            color: #74d856;
+        }
+        .receiver-stat-value.unclaimed {
+            color: #facc15;
+        }
+
+        .fee-badge {
+            background: transparent;
+            color: #74d856;
+            padding: 4px 10px;
+            border: 1px solid #74d856;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: 'Monaco', monospace;
+        }
+
+        /* Claims Expandable Section */
+        .claims-expandable {
+            display: none;
+            border-top: 1px solid #1a1a1c;
+            padding: 16px;
+            background: #0a0a0b;
+        }
+        .claims-expandable.expanded {
+            display: block;
+        }
+
+        .claim-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 16px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #1a1a1c;
+            align-items: center;
+        }
+        .claim-row:last-child {
+            border-bottom: none;
+        }
         .claim-row:hover {
-            background: #1f2542;
-            border-color: #3f3f46;
+            background: #0f0f10;
         }
         .claim-amount {
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 700;
-            color: #86efac;
+            color: #74d856;
             font-family: 'Monaco', monospace;
         }
         .claim-date {
-            font-size: 13px;
-            color: #9ca3af;
+            font-size: 11px;
+            color: #71717a;
+            font-family: 'Monaco', monospace;
         }
         .claim-link {
-            padding: 6px 12px;
-            background: rgba(129, 140, 248, 0.1);
+            padding: 4px 10px;
+            background: transparent;
+            border: 1px solid #1a1a1c;
             border-radius: 6px;
-            color: #818cf8;
+            color: #71717a;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             transition: all 0.2s;
-            border: 1px solid rgba(129, 140, 248, 0.2);
         }
         .claim-link:hover {
-            background: rgba(129, 140, 248, 0.2);
-            border-color: rgba(129, 140, 248, 0.4);
+            border-color: #74d856;
+            color: #74d856;
         }
-        .solscan-icon {
-            display: inline-block;
-            margin-left: 4px;
+
+        /* Info Notice */
+        .info-notice {
+            background: transparent;
+            border: 1px solid #1a1a1c;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 12px;
+            font-size: 10px;
+            color: #71717a;
+            font-weight: 500;
         }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #52525b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <h1>🎯 Bags Auto Fee Tracker</h1>
-            <p>Automatically track Bags token fee receivers and monitor when they claim fees for specific tokens.</p>
-            
-            <div id="rateLimit" class="rate-limit" style="display:none;">
-                <div>API Requests Remaining</div>
-                <div class="rate-limit-number" id="rateLimitNumber">1000/1000</div>
-            </div>
-
-            <div class="input-group">
-                <label>Bags Token Mint Address</label>
-                <input 
-                    type="text" 
-                    id="tokenMint" 
-                    placeholder="e.g., AVK2pzsusbZh7PUy4ZHZbH1ZFgSLYUZ8hvgQnVNcBAGS"
-                />
-                <div class="btn-group">
-                    <button class="btn-primary" onclick="findReceivers()">Find Receivers</button>
-                </div>
-            </div>
-
-            <div id="error" style="display:none;"></div>
-            <div id="loading" style="display:none;" class="success">Loading...</div>
-            <div id="results"></div>
+        <div class="header">
+            <h1>BAGS FEE TRACKER</h1>
+            <p class="subtitle">Real-time fee receiver monitoring</p>
         </div>
 
-        <div id="tracked" style="display:none;" class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="margin: 0;">Tracked Fee Receivers</h2>
-                <button class="btn-primary" onclick="checkAllClaims()">Check All</button>
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Token Search</span>
             </div>
-            <div id="trackedList"></div>
+            <div class="panel-body">
+                <div class="search-section">
+                    <input
+                        type="text"
+                        id="tokenMint"
+                        placeholder="ENTER TOKEN MINT ADDRESS"
+                    />
+                    <button class="btn-primary" onclick="findReceivers()">FIND RECEIVERS</button>
+                </div>
+
+                <div id="error" style="display:none;"></div>
+                <div id="loading" style="display:none;" class="success">LOADING...</div>
+                <div id="results"></div>
+            </div>
+        </div>
+
+        <div id="tracked" style="display:none;" class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Tracked Receivers</span>
+                <button class="btn-secondary" onclick="checkAllClaims()">CHECK ALL</button>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <div id="trackedList"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        const BACKEND_URL = '';
+        const BACKEND_URL = 'http://localhost:3001';
         let trackedTokens = JSON.parse(localStorage.getItem('trackedTokens') || '[]');
 
-        // Load tracked tokens on page load
         window.addEventListener('load', () => {
             updateTrackedList();
         });
 
-        async function fetchRateLimit() {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/rate-limit`);
-                const data = await response.json();
-                document.getElementById('rateLimit').style.display = 'block';
-                document.getElementById('rateLimitNumber').textContent = 
-                    `${data.remaining}/${data.total}`;
-            } catch (err) {
-                console.error('Failed to fetch rate limit:', err);
-            }
-        }
-
         async function findReceivers() {
             const tokenMint = document.getElementById('tokenMint').value.trim();
-            
+
             if (!tokenMint) {
                 showError('Please enter a token mint address');
                 return;
@@ -359,8 +485,6 @@
             try {
                 const response = await fetch(`${BACKEND_URL}/api/token/${tokenMint}`);
                 const data = await response.json();
-                
-                console.log('Full API Response:', data);
 
                 if (!response.ok) {
                     throw new Error(data.error || 'Failed to fetch token data');
@@ -371,39 +495,43 @@
                 }
 
                 const creators = data.response.creators;
-                let html = '<h3>Fee Receivers Found:</h3>';
+                let html = '<div style="margin-top: 16px;"><table class="data-table"><thead><tr><th>RECEIVER</th><th>WALLET</th><th>FEE SPLIT</th><th></th></tr></thead><tbody>';
                 let foundAny = false;
 
                 for (const creator of creators) {
                     const twitterUsername = creator.twitterUsername || creator.providerUsername || creator.socialAccount?.username;
                     const wallet = creator.wallet;
                     const feePercentage = creator.royaltyBps ? (creator.royaltyBps / 100) : 0;
-                    
+                    const pfp = creator.pfp || '';
+
                     if (twitterUsername && wallet) {
                         foundAny = true;
                         html += `
-                            <div class="creator-item">
-                                <div class="creator-header">
-                                    <div class="creator-info">
-                                        <div class="creator-name">@${twitterUsername}</div>
-                                        <div class="creator-wallet">${wallet}</div>
-                                        <small>Fee: ${feePercentage}%</small>
-                                    </div>
-                                    <button class="btn-primary" onclick="trackCreator('${tokenMint}', '${twitterUsername}', '${wallet}', ${feePercentage})">
-                                        Track
+                            <tr>
+                                <td>
+                                    ${pfp ? `<img src="${pfp}" class="profile-img" onerror="this.style.display='none'">` : ''}
+                                    <strong><a href="https://x.com/${twitterUsername}" target="_blank" style="color: #74d856; text-decoration: none;">@${twitterUsername}</a></strong>
+                                </td>
+                                <td style="font-family: Monaco, monospace; font-size: 11px; color: #71717a;">${wallet}</td>
+                                <td><span class="fee-badge">${feePercentage}%</span></td>
+                                <td style="text-align: right;">
+                                    <button class="btn-primary" onclick="trackCreator('${tokenMint}', '${twitterUsername}', '${wallet}', ${feePercentage}, '${pfp.replace(/'/g, "\\'")}')">
+                                        TRACK
                                     </button>
-                                </div>
-                            </div>
+                                </td>
+                            </tr>
                         `;
                     }
                 }
 
+                html += '</tbody></table>';
+
                 if (!foundAny) {
-                    html += '<p>No valid fee receivers found with wallet addresses.</p>';
+                    html = '<div class="empty-state">No receivers found</div>';
                 }
 
+                html += '</div>';
                 document.getElementById('results').innerHTML = html;
-                fetchRateLimit();
 
             } catch (err) {
                 showError(err.message);
@@ -412,9 +540,8 @@
             }
         }
 
-        function trackCreator(tokenMint, username, wallet, feePercentage) {
-            // Check if already tracking this combination
-            const existing = trackedTokens.find(t => 
+        async function trackCreator(tokenMint, username, wallet, feePercentage, pfp) {
+            const existing = trackedTokens.find(t =>
                 t.wallet === wallet && t.tokenMint === tokenMint
             );
 
@@ -423,148 +550,37 @@
                 return;
             }
 
+            // Fetch token metadata
+            let tokenMetadata = null;
+            try {
+                const metaResponse = await fetch(`${BACKEND_URL}/api/token-info/${tokenMint}`);
+                tokenMetadata = await metaResponse.json();
+            } catch (err) {
+                console.log('Could not fetch token metadata:', err);
+            }
+
             const token = {
                 id: Date.now(),
                 tokenMint,
                 username,
                 wallet,
                 feePercentage,
+                pfp: pfp || '',
                 hasClaimed: false,
                 claimHistory: [],
                 totalClaimed: 0,
                 claimCount: 0,
                 addedAt: new Date().toISOString(),
-                lastChecked: null
+                lastChecked: null,
+                tokenMetadata: tokenMetadata
             };
 
             trackedTokens.push(token);
             saveTrackedTokens();
             updateTrackedList();
-            showSuccess(`Now tracking @${username} for token ${tokenMint.slice(0, 8)}...`);
-            
-            // Auto-check on add
+            showSuccess(`Now tracking @${username}`);
+
             setTimeout(() => checkClaim(token.id), 1000);
-        }
-
-        function saveTrackedTokens() {
-            localStorage.setItem('trackedTokens', JSON.stringify(trackedTokens));
-        }
-
-        function updateTrackedList() {
-            const container = document.getElementById('tracked');
-            const list = document.getElementById('trackedList');
-
-            if (trackedTokens.length === 0) {
-                container.style.display = 'none';
-                return;
-            }
-
-            container.style.display = 'block';
-            list.innerHTML = '';
-
-            // Group by token mint
-            const groupedByToken = {};
-            trackedTokens.forEach(token => {
-                if (!groupedByToken[token.tokenMint]) {
-                    groupedByToken[token.tokenMint] = [];
-                }
-                groupedByToken[token.tokenMint].push(token);
-            });
-
-            // Render each token group
-            Object.keys(groupedByToken).forEach(tokenMint => {
-                const tokens = groupedByToken[tokenMint];
-                const tokenDiv = document.createElement('div');
-                tokenDiv.style.marginBottom = '30px';
-                
-                let tokenHtml = `
-                    <h3>Token: ${tokenMint.slice(0, 8)}...${tokenMint.slice(-8)}
-                        <span class="token-badge">${tokens.length} receiver${tokens.length > 1 ? 's' : ''}</span>
-                    </h3>
-                `;
-
-                tokens.forEach(token => {
-                    let claimHistoryHtml = '';
-                    if (token.claimHistory && token.claimHistory.length > 0) {
-                        claimHistoryHtml = '<div class="claims-list">';
-                        claimHistoryHtml += '<h3>📜 Claim History</h3>';
-                        
-                        token.claimHistory.slice(0, 10).forEach(claim => {
-                            const date = new Date(claim.timestamp);
-                            const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                            const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                            const currency = claim.currency || 'SOL';
-                            
-                            claimHistoryHtml += `
-                                <div class="claim-row">
-                                    <div>
-                                        <div class="claim-amount">+${claim.amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})} ${currency}</div>
-                                        <div class="claim-date">${dateStr} at ${timeStr}</div>
-                                    </div>
-                                    <a href="${claim.txUrl}" target="_blank" class="claim-link">
-                                        View <span class="solscan-icon">↗</span>
-                                    </a>
-                                </div>
-                            `;
-                        });
-
-                        if (token.claimHistory.length > 10) {
-                            claimHistoryHtml += `<div style="text-align: center; margin-top: 12px; color: #71717a; font-size: 13px;">
-                                +${token.claimHistory.length - 10} more claim${token.claimHistory.length - 10 > 1 ? 's' : ''}
-                            </div>`;
-                        }
-                        
-                        claimHistoryHtml += '</div>';
-                    }
-
-                    const currency = token.currency || 'SOL';
-                    const statsHtml = `
-                        <div class="stats-grid">
-                            <div class="stat-box">
-                                <div class="stat-label">Total Claimed</div>
-                                <div class="stat-value">${(token.totalClaimed || 0).toLocaleString(undefined, {maximumFractionDigits: 4})} ${currency}</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Total Claims</div>
-                                <div class="stat-value">${token.claimCount || 0}</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">Fee Rate</div>
-                                <div class="stat-value">${token.feePercentage}%</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    tokenHtml += `
-                        <div class="tracked-item">
-                            <div class="creator-header">
-                                <div class="creator-info">
-                                    <div class="creator-name">@${token.username}</div>
-                                    <div class="creator-wallet">${token.wallet}</div>
-                                    ${token.lastChecked ? `<small>Last checked: ${new Date(token.lastChecked).toLocaleString()}</small>` : ''}
-                                </div>
-                                <div style="text-align: right;">
-                                    <span class="status-badge ${token.hasClaimed ? 'status-claimed' : 'status-pending'}">
-                                        ${token.hasClaimed ? `✓ ${token.claimCount} Claim${token.claimCount > 1 ? 's' : ''}` : 'No Claims Yet'}
-                                    </span>
-                                    <div style="margin-top: 10px;">
-                                        <button class="btn-secondary" onclick="checkClaim(${token.id})">Refresh</button>
-                                        <button class="btn-danger" onclick="removeTracked(${token.id})" style="margin-left:5px;">Remove</button>
-                                    </div>
-                                </div>
-                            </div>
-                            ${statsHtml}
-                            ${claimHistoryHtml}
-                            <div style="margin-top:15px;">
-                                <a href="https://solscan.io/account/${token.wallet}" target="_blank" style="color:#667eea;">View Wallet on Solscan →</a>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                tokenDiv.innerHTML = tokenHtml;
-                list.appendChild(tokenDiv);
-            });
         }
 
         async function checkClaim(tokenId) {
@@ -573,26 +589,38 @@
 
             try {
                 showLoading();
-                const response = await fetch(
+
+                // Fetch claim history
+                const claimResponse = await fetch(
                     `${BACKEND_URL}/api/check-claim/${token.wallet}/${token.tokenMint}`
                 );
-                const data = await response.json();
+                const claimData = await claimResponse.json();
 
-                console.log('Claim check result:', data);
+                token.hasClaimed = claimData.hasClaimed;
+                token.claimHistory = claimData.claimHistory || [];
+                token.totalClaimed = claimData.totalClaimed || 0;
+                token.claimCount = claimData.claimCount || 0;
+                token.lastChecked = claimData.lastChecked;
+                token.currency = claimData.currency || 'SOL';
 
-                token.hasClaimed = data.hasClaimed;
-                token.claimHistory = data.claimHistory || [];
-                token.totalClaimed = data.totalClaimed || 0;
-                token.claimCount = data.claimCount || 0;
-                token.lastChecked = data.lastChecked;
-                token.currency = data.currency || 'SOL';
+                // Fetch lifetime fees
+                try {
+                    const lifetimeResponse = await fetch(
+                        `${BACKEND_URL}/api/lifetime-fees/${token.tokenMint}`
+                    );
+                    const lifetimeData = await lifetimeResponse.json();
+                    token.lifetimeFees = lifetimeData;
+                } catch (err) {
+                    console.log('Could not fetch lifetime fees:', err);
+                    token.lifetimeFees = null;
+                }
 
                 saveTrackedTokens();
                 updateTrackedList();
                 hideLoading();
 
-                if (data.hasClaimed) {
-                    showSuccess(`Found ${data.claimCount} claim(s) for @${token.username}!`);
+                if (claimData.hasClaimed) {
+                    showSuccess(`Found ${claimData.claimCount} claim(s) for @${token.username}`);
                 }
             } catch (err) {
                 console.error('Failed to check claim:', err);
@@ -602,33 +630,177 @@
         }
 
         async function checkAllClaims() {
-            showLoading();
             for (const token of trackedTokens) {
                 await checkClaim(token.id);
-                await new Promise(resolve => setTimeout(resolve, 500)); // Rate limiting
             }
-            hideLoading();
-            showSuccess('All claims checked!');
         }
 
-        function removeTracked(tokenId) {
-            const token = trackedTokens.find(t => t.id === tokenId);
-            if (confirm(`Remove tracking for @${token.username}?`)) {
+        function toggleClaims(tokenId) {
+            const element = document.getElementById('claims-' + tokenId);
+            if (element) {
+                element.classList.toggle('expanded');
+                const btn = document.getElementById('btn-' + tokenId);
+                if (btn) {
+                    btn.textContent = element.classList.contains('expanded') ? 'COLLAPSE' : 'VIEW CLAIMS';
+                }
+            }
+        }
+
+        function updateTrackedList() {
+            const trackedDiv = document.getElementById('tracked');
+            const listDiv = document.getElementById('trackedList');
+
+            if (trackedTokens.length === 0) {
+                trackedDiv.style.display = 'none';
+                return;
+            }
+
+            trackedDiv.style.display = 'block';
+
+            // Group by token
+            const groupedByToken = {};
+            trackedTokens.forEach(token => {
+                if (!groupedByToken[token.tokenMint]) {
+                    groupedByToken[token.tokenMint] = [];
+                }
+                groupedByToken[token.tokenMint].push(token);
+            });
+
+            let html = '';
+
+            for (const [tokenMint, tokens] of Object.entries(groupedByToken)) {
+                const tokenMeta = tokens[0].tokenMetadata || {};
+                const tokenImage = tokenMeta.logoURI || '';
+                const tokenName = tokenMeta.name || 'Unknown Token';
+                const tokenSymbol = tokenMeta.symbol || tokenMint.slice(0, 8);
+
+                // Token Header
+                html += `
+                    <div class="token-header">
+                        ${tokenImage ? `<img src="${tokenImage}" class="token-logo" onerror="this.style.display='none'">` : '<div class="token-logo"></div>'}
+                        <div class="token-info">
+                            <div class="token-ticker">${tokenSymbol}</div>
+                            <div class="token-name">${tokenName}</div>
+                            <div class="token-address">${tokenMint}</div>
+                        </div>
+                    </div>
+                `;
+
+                // Each tracked receiver - COMPACT ROW
+                tokens.forEach(token => {
+                    // Calculate unclaimed
+                    let unclaimedSol = 0;
+                    if (token.lifetimeFees && token.lifetimeFees.success && token.lifetimeFees.response) {
+                        const totalFeesLamports = typeof token.lifetimeFees.response === 'string'
+                            ? parseFloat(token.lifetimeFees.response)
+                            : token.lifetimeFees.response;
+                        const totalFeesSol = totalFeesLamports / 1e9;
+                        const userShareSol = (totalFeesSol * token.feePercentage) / 100;
+                        const userClaimedSol = token.totalClaimed || 0;
+                        unclaimedSol = Math.max(0, userShareSol - userClaimedSol);
+                    }
+
+                    html += `
+                        <div class="receiver-row">
+                            <div class="receiver-profile">
+                                ${token.pfp ? `<img src="${token.pfp}" class="receiver-profile-img" onerror="this.style.display='none'">` : ''}
+                                <div>
+                                    <div class="receiver-username"><a href="https://x.com/${token.username}" target="_blank">@${token.username}</a></div>
+                                    <div class="receiver-wallet">${token.wallet.slice(0, 12)}...${token.wallet.slice(-8)}</div>
+                                </div>
+                            </div>
+
+                            <div class="receiver-stats">
+                                <div class="receiver-stat">
+                                    <div class="receiver-stat-label">Fee Split</div>
+                                    <div class="receiver-stat-value">${token.feePercentage}%</div>
+                                </div>
+                                <div class="receiver-stat">
+                                    <div class="receiver-stat-label">Claimed</div>
+                                    <div class="receiver-stat-value claimed">${(token.totalClaimed || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
+                                </div>
+                                <div class="receiver-stat">
+                                    <div class="receiver-stat-label">Unclaimed</div>
+                                    <div class="receiver-stat-value unclaimed">${unclaimedSol.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
+                                </div>
+                                <div class="receiver-stat">
+                                    <div class="receiver-stat-label">Claims</div>
+                                    <div class="receiver-stat-value">${token.claimCount || 0}</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                ${token.claimHistory && token.claimHistory.length > 0 ? `<button class="btn-expand" id="btn-${token.id}" onclick="toggleClaims(${token.id})">VIEW CLAIMS</button>` : '<span style="color: #52525b; font-size: 11px;">NO CLAIMS</span>'}
+                            </div>
+
+                            <button class="btn-secondary" onclick="checkClaim(${token.id})">CHECK</button>
+                            <button class="btn-danger" onclick="removeToken(${token.id})">REMOVE</button>
+                        </div>
+
+                        ${token.claimHistory && token.claimHistory.length > 0 ? `
+                        <div class="receiver-row" style="padding: 0; background: #0a0a0b; border-top: none;">
+                            <div class="claims-expandable" id="claims-${token.id}">
+                    ` : ''}
+                    `;
+
+                    // Claims History
+                    if (token.claimHistory && token.claimHistory.length > 0) {
+                        token.claimHistory.forEach(claim => {
+                            const date = new Date(claim.timestamp * 1000);
+                            const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+                            const timeStr = date.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+
+                            html += `
+                                <div class="claim-row">
+                                    <div class="claim-amount">${claim.amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})} ${claim.currency}</div>
+                                    <div class="claim-date">${dateStr} ${timeStr}</div>
+                                    <a href="https://solscan.io/tx/${claim.signature}" target="_blank" class="claim-link">VIEW TX</a>
+                                </div>
+                            `;
+                        });
+
+                        html += `
+                                <div class="info-notice">Showing claims from last 50 transactions</div>
+                            </div>
+                        </div>
+                        `;
+                    }
+                });
+            }
+
+            listDiv.innerHTML = html;
+        }
+
+        function removeToken(tokenId) {
+            if (confirm('Remove this tracked receiver?')) {
                 trackedTokens = trackedTokens.filter(t => t.id !== tokenId);
                 saveTrackedTokens();
                 updateTrackedList();
+                showSuccess('Receiver removed');
             }
         }
 
+        function saveTrackedTokens() {
+            localStorage.setItem('trackedTokens', JSON.stringify(trackedTokens));
+        }
+
         function showError(message) {
-            const div = document.getElementById('error');
-            div.className = 'error';
-            div.textContent = message;
-            div.style.display = 'block';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message.toUpperCase();
+            errorDiv.className = 'error';
+            errorDiv.style.display = 'block';
         }
 
         function hideError() {
             document.getElementById('error').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message.toUpperCase();
+            errorDiv.className = 'success';
+            errorDiv.style.display = 'block';
+            setTimeout(hideError, 3000);
         }
 
         function showLoading() {
@@ -638,19 +810,6 @@
         function hideLoading() {
             document.getElementById('loading').style.display = 'none';
         }
-
-        function showSuccess(message) {
-            const div = document.getElementById('loading');
-            div.className = 'success';
-            div.textContent = message;
-            div.style.display = 'block';
-            setTimeout(() => {
-                div.style.display = 'none';
-            }, 3000);
-        }
-
-        // Initial rate limit fetch
-        fetchRateLimit();
     </script>
 </body>
 </html>

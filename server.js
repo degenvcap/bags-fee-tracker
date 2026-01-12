@@ -122,23 +122,57 @@ app.get('/api/token-info/:mintAddress', async (req, res) => {
 
     const data = await response.json();
     
-    // Try to get metadata from Jupiter or other sources
+    // Try to get metadata from Solana metadata URI first
+    try {
+      // Fetch from Metaplex metadata
+      const metadataResponse = await fetch(`https://api.helius.xyz/v0/token-metadata?api-key=${process.env.HELIUS_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mintAccounts: [mintAddress],
+          includeOffChain: true,
+          disableCache: false
+        })
+      });
+
+      const metadataData = await metadataResponse.json();
+
+      if (metadataData && metadataData.length > 0 && metadataData[0].offChainMetadata) {
+        const metadata = metadataData[0].offChainMetadata.metadata;
+        res.json({
+          success: true,
+          name: metadata.name || 'Unknown Token',
+          symbol: metadata.symbol || mintAddress.slice(0, 8),
+          decimals: 9,
+          logoURI: metadata.image || null
+        });
+        return;
+      }
+    } catch (err) {
+      console.log('Helius metadata fetch failed, trying Jupiter...');
+    }
+
+    // Fallback to Jupiter
     try {
       const jupiterResponse = await fetch(`https://token.jup.ag/strict/${mintAddress}`);
       const jupiterData = await jupiterResponse.json();
-      
+
       res.json({
         success: true,
         name: jupiterData.name || 'Unknown Token',
         symbol: jupiterData.symbol || mintAddress.slice(0, 8),
-        decimals: jupiterData.decimals || 9
+        decimals: jupiterData.decimals || 9,
+        logoURI: jupiterData.logoURI || null
       });
     } catch {
       res.json({
         success: true,
         name: 'Unknown Token',
         symbol: mintAddress.slice(0, 8),
-        decimals: 9
+        decimals: 9,
+        logoURI: null
       });
     }
   } catch (error) {
@@ -423,6 +457,117 @@ app.get('/api/check-claim/:wallet/:tokenMint', async (req, res) => {
 
   } catch (error) {
     console.error('Check claim error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get claimable positions for a wallet
+app.get('/api/claimable-positions/:wallet', async (req, res) => {
+  try {
+    if (!checkRateLimit()) {
+      return res.status(429).json({
+        error: 'Rate limit exceeded. Try again later.',
+        remaining: 0,
+        resetTime: new Date(resetTime).toISOString()
+      });
+    }
+
+    const { wallet } = req.params;
+    const response = await fetch(
+      `https://public-api-v2.bags.fm/api/v1/token-launch/claimable-positions?wallet=${wallet}`,
+      {
+        headers: {
+          'x-api-key': BAGS_API_KEY
+        }
+      }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get lifetime fees for a token
+app.get('/api/lifetime-fees/:tokenMint', async (req, res) => {
+  try {
+    if (!checkRateLimit()) {
+      return res.status(429).json({
+        error: 'Rate limit exceeded. Try again later.',
+        remaining: 0,
+        resetTime: new Date(resetTime).toISOString()
+      });
+    }
+
+    const { tokenMint } = req.params;
+    const response = await fetch(
+      `https://public-api-v2.bags.fm/api/v1/token-launch/lifetime-fees?tokenMint=${tokenMint}`,
+      {
+        headers: {
+          'x-api-key': BAGS_API_KEY
+        }
+      }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get claim statistics for a wallet
+app.get('/api/claim-stats/:wallet', async (req, res) => {
+  try {
+    if (!checkRateLimit()) {
+      return res.status(429).json({
+        error: 'Rate limit exceeded. Try again later.',
+        remaining: 0,
+        resetTime: new Date(resetTime).toISOString()
+      });
+    }
+
+    const { wallet } = req.params;
+    const response = await fetch(
+      `https://public-api-v2.bags.fm/api/v1/token-launch/claim-stats?wallet=${wallet}`,
+      {
+        headers: {
+          'x-api-key': BAGS_API_KEY
+        }
+      }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get receiver analytics - all tokens for a Twitter username
+app.get('/api/receiver-analytics/:username', async (req, res) => {
+  try {
+    if (!checkRateLimit()) {
+      return res.status(429).json({
+        error: 'Rate limit exceeded. Try again later.',
+        remaining: 0,
+        resetTime: new Date(resetTime).toISOString()
+      });
+    }
+
+    const { username } = req.params;
+
+    // This would require getting wallet first, then querying all tokens for that wallet
+    // The Bags API doesn't have a direct endpoint for this
+    // We'd need to track this on our end or make multiple API calls
+
+    res.json({
+      success: true,
+      message: 'This feature requires tracking multiple tokens per receiver',
+      note: 'Consider implementing client-side aggregation of tracked tokens'
+    });
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
