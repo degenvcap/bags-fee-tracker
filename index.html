@@ -676,6 +676,11 @@
         let trackedTokens = JSON.parse(localStorage.getItem('trackedTokens') || '[]');
 
         window.addEventListener('load', () => {
+            // Check if opened as file:// protocol
+            if (window.location.protocol === 'file:') {
+                showError('Please open this file through a web server (localhost), not as a file. The API calls will not work from file://');
+                return;
+            }
             updateTrackedList();
         });
 
@@ -864,6 +869,10 @@
         // Copy to clipboard function
         function copyToClipboard(text, buttonId) {
             navigator.clipboard.writeText(text).then(() => {
+                // Show success message
+                showSuccess('Copied to clipboard');
+
+                // Also update button if it exists (for backwards compatibility)
                 const btn = document.getElementById(buttonId);
                 if (btn) {
                     btn.classList.add('copied');
@@ -875,6 +884,7 @@
                 }
             }).catch(err => {
                 console.error('Failed to copy:', err);
+                showError('Failed to copy to clipboard');
             });
         }
 
@@ -978,8 +988,12 @@
                         <div class="token-info">
                             <div class="token-ticker">${tokenSymbol}</div>
                             <div class="token-name">${tokenName}</div>
-                            <div class="token-address">${tokenMint.slice(0, 12)}...${tokenMint.slice(-12)}
-                                <button class="copy-btn" id="${copyBtnId}" onclick="copyToClipboard('${tokenMint}', '${copyBtnId}')">📋 COPY</button>
+                            <div class="token-address">
+                                <span onclick="copyToClipboard('${tokenMint}', '${copyBtnId}')" style="cursor: pointer;" title="Click to copy">
+                                    ${tokenMint.slice(0, 12)}...${tokenMint.slice(-12)}
+                                </span>
+                                <button class="copy-btn" id="${copyBtnId}" onclick="copyToClipboard('${tokenMint}', '${copyBtnId}')" style="display: none;">📋 COPY</button>
+                                <a href="https://solscan.io/token/${tokenMint}" target="_blank" style="margin-left: 6px; color: #71717a; text-decoration: none; font-size: 11px;" title="View on Solscan">🔗</a>
                             </div>
                         </div>
                         <span class="status-badge ${statusClass}">
@@ -1034,8 +1048,11 @@
                                         </span>
                                     </div>
                                     <div class="receiver-wallet">
-                                        ${token.wallet.slice(0, 12)}...${token.wallet.slice(-8)}
-                                        <button class="copy-btn" id="${walletCopyId}" onclick="copyToClipboard('${token.wallet}', '${walletCopyId}')" style="margin-left: 6px; padding: 2px 6px; font-size: 9px;">📋</button>
+                                        <span onclick="copyToClipboard('${token.wallet}', '${walletCopyId}')" style="cursor: pointer;" title="Click to copy">
+                                            ${token.wallet.slice(0, 12)}...${token.wallet.slice(-8)}
+                                        </span>
+                                        <button class="copy-btn" id="${walletCopyId}" onclick="copyToClipboard('${token.wallet}', '${walletCopyId}')" style="margin-left: 6px; padding: 2px 6px; font-size: 9px; display: none;">📋</button>
+                                        <a href="https://solscan.io/account/${token.wallet}" target="_blank" style="margin-left: 6px; color: #71717a; text-decoration: none; font-size: 11px;" title="View on Solscan">🔗</a>
                                     </div>
                                 </div>
                             </div>
@@ -1080,7 +1097,9 @@
                     // Claims History
                     if (token.claimHistory && token.claimHistory.length > 0) {
                         token.claimHistory.forEach(claim => {
-                            const date = new Date(claim.timestamp * 1000);
+                            // Handle both seconds and milliseconds timestamps
+                            const timestamp = claim.timestamp > 10000000000 ? claim.timestamp : claim.timestamp * 1000;
+                            const date = new Date(timestamp);
                             const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
                             const timeStr = date.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
 
