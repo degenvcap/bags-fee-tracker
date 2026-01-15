@@ -3,108 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAGS FEE TRACKER</title>
+    <title>bagstrack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        :root {
+            --primary-green: #22c55e;
+            --dark-green: #16a34a;
+            --warm-orange: #ff9066;
+            --soft-blue: #6ba3ff;
+            --warm-yellow: #fbbf24;
+            --text-dark: #f5f5f5;
+            --text-mid: #a3a3a3;
+            --text-light: #6b6b6b;
+            --bg-cream: #0c0c0c;
+            --bg-white: #161616;
+            --border-soft: #2a2a2a;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0a0a0b;
-            color: #d4d4d8;
+            background: var(--bg-cream);
+            color: var(--text-dark);
             min-height: 100vh;
-            padding: 20px;
-            line-height: 1.5;
+            padding: 16px 20px;
+            line-height: 1.4;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         /* Header */
         .header {
-            margin-bottom: 24px;
-            border-bottom: 1px solid #1a1a1c;
-            padding-bottom: 16px;
-        }
-        h1 {
-            color: #74d856;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        .subtitle {
-            color: #71717a;
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            text-align: left;
+            padding: 12px 0;
         }
 
-        /* Stats Dashboard */
-        .stats-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .stat-card {
-            background: #0f0f10;
-            border: 1px solid #1a1a1c;
-            border-radius: 12px;
-            padding: 16px;
-            transition: all 0.2s;
-        }
-        .stat-card:hover {
-            border-color: #27272a;
-            transform: translateY(-2px);
-        }
-        .stat-icon {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-        .stat-label {
-            font-size: 10px;
-            color: #71717a;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-        .stat-value {
-            font-size: 24px;
+        /* Live Indicator */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 4px;
+            font-size: 9px;
             font-weight: 700;
-            color: #ffffff;
-            font-family: 'Monaco', monospace;
+            color: var(--primary-green);
+            letter-spacing: 0.5px;
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* Live Toggle Button */
+        .live-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border-soft);
+            background: transparent;
+            color: var(--text-mid);
+        }
+        .live-toggle.active {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+        }
+        .live-toggle .toggle-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .live-toggle.active .toggle-dot {
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 6px var(--primary-green);
+        }
+
+        /* Glowing tracked indicator */
+        .tracking-glow {
+            position: relative;
+        }
+        .tracking-glow::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 6px;
+            background: linear-gradient(45deg, var(--primary-green), transparent, var(--primary-green));
+            opacity: 0.3;
+            animation: glowPulse 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Info warning */
+        .info-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 9px;
+            color: var(--warm-yellow);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 700;
+            
             margin-bottom: 4px;
         }
+
+        h1 .highlight {
+            color: var(--primary-green);
+        }
+
+        .subtitle {
+            color: var(--text-mid);
+            font-size: 8px;
+            font-weight: 500;
+            
+        }
+
+        /* Stats Dashboard - Compact inline style */
+        .stats-dashboard {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: fit-content;
+        }
+        .stat-icon {
+            font-size: 12px;
+            display: none;
+        }
+        .stat-label {
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .stat-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-green);
+            line-height: 1;
+        }
         .stat-value.green {
-            color: #74d856;
+            color: var(--primary-green);
         }
         .stat-value.yellow {
-            color: #facc15;
+            color: var(--warm-yellow);
         }
         .stat-subvalue {
-            font-size: 11px;
-            color: #71717a;
-            font-family: 'Monaco', monospace;
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 500;
         }
         .stat-progress {
-            height: 4px;
-            background: #1a1a1c;
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
+            display: none;
         }
         .stat-progress-bar {
             height: 100%;
-            background: #74d856;
-            border-radius: 2px;
+            background: var(--primary-green);
+            border-radius: 10px;
             transition: width 0.5s ease;
         }
 
@@ -113,58 +235,57 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 4px 8px;
+            padding: 2px 6px;
             background: transparent;
-            border: 1px solid #1a1a1c;
-            border-radius: 6px;
-            color: #71717a;
-            font-size: 10px;
+            border: 1px solid var(--border-soft);
+            border-radius: 8px;
+            color: var(--text-mid);
+            font-size: 9px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
             font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             font-weight: 600;
         }
         .copy-btn:hover {
-            border-color: #74d856;
-            color: #74d856;
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+            background: rgba(116, 216, 86, 0.05);
         }
         .copy-btn.copied {
-            border-color: #74d856;
-            color: #74d856;
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+            background: rgba(116, 216, 86, 0.1);
         }
 
         /* Status Badge */
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
+            gap: 6px;
+            padding: 2px 6px;
             border-radius: 6px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
         .status-badge.active {
             background: rgba(116, 216, 86, 0.1);
-            color: #74d856;
-            border: 1px solid #74d856;
+            color: var(--dark-green);
+            border: 1px solid rgba(116, 216, 86, 0.3);
         }
         .status-badge.pending {
-            background: rgba(250, 204, 21, 0.1);
-            color: #facc15;
-            border: 1px solid #facc15;
+            background: rgba(255, 214, 102, 0.1);
+            color: #d4a018;
+            border: 1px solid rgba(255, 214, 102, 0.3);
         }
         .status-badge.inactive {
-            background: rgba(113, 113, 122, 0.1);
-            color: #71717a;
-            border: 1px solid #27272a;
+            background: rgba(106, 106, 106, 0.08);
+            color: var(--text-light);
+            border: 1px solid var(--border-soft);
         }
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: currentColor;
         }
@@ -176,10 +297,10 @@
         }
         .tooltip .tooltiptext {
             visibility: hidden;
-            background-color: #1a1a1c;
-            color: #d4d4d8;
-            text-align: center;
-            border-radius: 6px;
+            background-color: var(--text-dark);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
             padding: 6px 10px;
             position: absolute;
             z-index: 1;
@@ -187,10 +308,10 @@
             left: 50%;
             transform: translateX(-50%);
             opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 11px;
+            transition: opacity 0.15s;
+            font-size: 9px;
             white-space: nowrap;
-            border: 1px solid #27272a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         .tooltip:hover .tooltiptext {
             visibility: visible;
@@ -213,48 +334,48 @@
             to { opacity: 0; }
         }
         .slide-in {
-            animation: slideInDown 0.3s ease-out;
+            animation: slideIn 0.15s ease-out;
         }
         .fade-out {
-            animation: fadeOut 0.3s ease-out forwards;
+            animation: fadeOut 0.15s ease-out forwards;
         }
 
         /* Last Checked */
         .last-checked {
             font-size: 10px;
-            color: #52525b;
+            color: #6b6b6b;
             font-style: italic;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
         /* Panel */
         .panel {
-            background: #0f0f10;
-            border: 1px solid #1a1a1c;
-            border-radius: 12px;
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            border-radius: 6px;
             margin-bottom: 12px;
             padding: 0;
             overflow: hidden;
         }
 
         .panel-header {
-            padding: 12px 16px;
-            border-bottom: 1px solid #1a1a1c;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-soft);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--bg-cream);
         }
 
         .panel-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: #71717a;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-dark);
         }
 
         .panel-body {
-            padding: 16px;
+            padding: 10px;
         }
 
         /* Search Section */
@@ -266,98 +387,99 @@
 
         input {
             flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #1a1a1c;
-            border-radius: 8px;
-            background: #0a0a0b;
-            color: #d4d4d8;
-            font-size: 13px;
-            font-family: 'Monaco', 'Courier New', monospace;
+            padding: 8px 10px;
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 11px;
+            font-family: 'Inter', sans-serif;
             font-weight: 500;
-            transition: border-color 0.2s;
+            transition: all 0.15s;
         }
         input:focus {
             outline: none;
-            border-color: #74d856;
+            border-color: var(--primary-green);
         }
         input::placeholder {
-            color: #3f3f46;
+            color: var(--text-light);
             font-weight: 400;
         }
 
         /* Buttons */
         button {
-            padding: 10px 20px;
-            border: 1px solid #1a1a1c;
-            border-radius: 8px;
-            background: #0a0a0b;
-            color: #d4d4d8;
+            padding: 8px 12px;
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            background: var(--bg-white);
+            color: var(--text-dark);
             font-weight: 600;
             cursor: pointer;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 10px;
             font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
         .btn-primary {
-            background: #74d856;
-            color: #0a0a0b;
-            border-color: #74d856;
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
         }
         .btn-primary:hover {
-            background: #5fb841;
-            border-color: #5fb841;
+            background: var(--dark-green);
+            border-color: var(--dark-green);
         }
         .btn-secondary {
-            border-color: #1a1a1c;
+            border-color: var(--border-soft);
+            color: var(--text-mid);
+            background: transparent;
         }
         .btn-secondary:hover {
-            background: #1a1a1c;
-            border-color: #27272a;
+            border-color: var(--text-dark);
+            color: var(--text-dark);
         }
         .btn-danger {
             background: transparent;
             color: #ef4444;
             border-color: #ef4444;
-            padding: 8px 14px;
-            font-size: 11px;
+            padding: 4px 6px;
+            font-size: 9px;
         }
         .btn-danger:hover {
             background: #ef4444;
-            color: #0a0a0b;
+            color: white;
         }
         .btn-expand {
             background: transparent;
-            color: #74d856;
-            border: 1px solid #74d856;
-            padding: 6px 14px;
-            font-size: 10px;
+            color: var(--primary-green);
+            border: 1px solid var(--primary-green);
+            padding: 4px 8px;
+            font-size: 9px;
         }
         .btn-expand:hover {
-            background: rgba(116, 216, 86, 0.1);
+            background: var(--primary-green);
+            color: white;
         }
 
         /* Messages */
         .error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 6px;
             color: #fca5a5;
-            padding: 10px 14px;
-            margin-bottom: 12px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
         .success {
-            background: rgba(116, 216, 86, 0.1);
-            border: 1px solid #74d856;
-            border-radius: 8px;
-            color: #74d856;
-            padding: 10px 14px;
-            margin-bottom: 12px;
+            background: rgba(116, 216, 86, 0.08);
+            border: 1px solid rgba(116, 216, 86, 0.3);
+            border-radius: 6px;
+            color: var(--dark-green);
+            padding: 10px 12px;
+            margin-bottom: 8px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         /* Table */
@@ -368,305 +490,387 @@
         }
         .data-table th {
             text-align: left;
-            padding: 10px 12px;
+            padding: 8px 10px;
             font-weight: 600;
-            color: #71717a;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: var(--text-mid);
             font-size: 10px;
-            border-bottom: 1px solid #1a1a1c;
+            border-bottom: 2px solid var(--border-soft);
+            background: var(--bg-cream);
         }
         .data-table td {
-            padding: 12px 12px;
-            border-bottom: 1px solid #1a1a1c;
-            color: #d4d4d8;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-soft);
+            color: var(--text-dark);
             font-weight: 500;
         }
         .data-table tr:last-child td {
             border-bottom: none;
         }
         .data-table tr:hover {
-            background: #0a0a0b;
+            background: var(--bg-cream);
         }
 
         /* Profile Images */
         .profile-img {
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            border: 1px solid #1a1a1c;
+            border: 1px solid var(--border-soft);
             object-fit: cover;
             vertical-align: middle;
-            margin-right: 8px;
+            margin-right: 1rem;
         }
 
-        /* Token Header */
+        /* Token Header - Compact */
         .token-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: #0a0a0b;
-            border: 1px solid #1a1a1c;
-            border-radius: 10px;
-            margin-bottom: 12px;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-cream);
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            margin-bottom: 4px;
+            margin-top: 12px;
+        }
+        .token-header:first-child {
+            margin-top: 0;
         }
         .token-logo {
-            width: 40px;
-            height: 40px;
-            background: #1a1a1c;
-            border: 1px solid #27272a;
-            border-radius: 8px;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            border-radius: 50%;
             object-fit: cover;
         }
-        .token-info { flex: 1; }
+        .token-info { flex: 1; display: flex; align-items: center; gap: 8px; }
         .token-ticker {
-            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 2px;
-            letter-spacing: 0.5px;
+            color: var(--text-dark);
         }
         .token-name {
             font-size: 11px;
-            color: #71717a;
+            color: var(--text-mid);
             font-weight: 500;
-            margin-bottom: 4px;
         }
         .token-address {
-            font-size: 10px;
-            color: #52525b;
+            font-size: 9px;
+            color: var(--text-light);
             font-family: 'Monaco', monospace;
         }
 
         /* Compact Receiver Row */
         .receiver-row {
-            display: grid;
-            grid-template-columns: auto 1fr auto auto auto;
-            gap: 16px;
+            display: flex;
+            gap: 10px;
             align-items: center;
-            padding: 12px 16px;
-            background: #0f0f10;
-            border: 1px solid #1a1a1c;
-            border-radius: 10px;
-            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            margin-bottom: 4px;
+            transition: all 0.15s;
         }
         .receiver-row:hover {
-            background: #0a0a0b;
+            border-color: var(--primary-green);
         }
 
         .receiver-profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            min-width: 180px;
         }
         .receiver-profile-img {
-            width: 36px;
-            height: 36px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            border: 1px solid #27272a;
+            border: 1px solid var(--border-soft);
             object-fit: cover;
         }
         .receiver-username {
             font-weight: 600;
-            color: #d4d4d8;
-            font-size: 13px;
+            color: var(--text-dark);
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         .receiver-username a {
-            color: #74d856;
+            color: var(--primary-green);
             text-decoration: none;
+            transition: opacity 0.15s;
         }
         .receiver-username a:hover {
+            opacity: 0.8;
             text-decoration: underline;
         }
         .receiver-wallet {
             font-family: 'Monaco', monospace;
-            font-size: 10px;
-            color: #52525b;
+            font-size: 9px;
+            color: var(--text-light);
         }
 
         .receiver-stats {
             display: flex;
-            gap: 24px;
+            gap: 10px;
             align-items: center;
+            margin-left: auto;
         }
         .receiver-stat {
             text-align: center;
+            padding: 4px 8px;
+            background: var(--bg-cream);
+            border-radius: 4px;
+            min-width: 60px;
         }
         .receiver-stat-label {
-            font-size: 9px;
-            color: #52525b;
+            font-size: 8px;
+            color: var(--text-light);
+            margin-bottom: 2px;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
         }
         .receiver-stat-value {
-            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
             font-weight: 700;
-            font-family: 'Monaco', monospace;
-            color: #d4d4d8;
+            color: var(--text-dark);
         }
         .receiver-stat-value.claimed {
-            color: #74d856;
+            color: var(--primary-green);
         }
         .receiver-stat-value.unclaimed {
-            color: #facc15;
+            color: var(--warm-yellow);
         }
 
         .fee-badge {
-            background: transparent;
-            color: #74d856;
-            padding: 4px 10px;
-            border: 1px solid #74d856;
-            border-radius: 100px;
-            font-size: 11px;
+            background: rgba(116, 216, 86, 0.1);
+            color: var(--dark-green);
+            padding: 2px 6px;
+            border: 1px solid rgba(116, 216, 86, 0.3);
+            border-radius: 6px;
+            font-size: 9px;
             font-weight: 700;
-            font-family: 'Monaco', monospace;
+            font-family: 'Inter', sans-serif;
         }
 
         /* Claims Expandable Section */
         .claims-expandable {
             display: none;
-            border-top: 1px solid #1a1a1c;
-            padding: 16px;
-            background: #0a0a0b;
+            border-top: 1px solid var(--border-soft);
+            padding: 8px;
+            background: var(--bg-cream);
         }
         .claims-expandable.expanded {
             display: block;
         }
 
         .claim-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 16px;
-            padding: 10px 12px;
-            border-bottom: 1px solid #1a1a1c;
+            display: flex;
+            gap: 10px;
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--border-soft);
             align-items: center;
         }
         .claim-row:last-child {
             border-bottom: none;
         }
         .claim-row:hover {
-            background: #0f0f10;
+            background: var(--bg-white);
         }
         .claim-amount {
-            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
             font-weight: 700;
-            color: #74d856;
-            font-family: 'Monaco', monospace;
+            color: var(--primary-green);
+            min-width: 80px;
         }
         .claim-date {
-            font-size: 11px;
-            color: #71717a;
-            font-family: 'Monaco', monospace;
+            font-size: 9px;
+            color: var(--text-mid);
+            font-family: 'Inter', sans-serif;
+            flex: 1;
         }
         .claim-link {
-            padding: 4px 10px;
+            padding: 3px 8px;
             background: transparent;
-            border: 1px solid #1a1a1c;
-            border-radius: 6px;
-            color: #71717a;
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            color: var(--text-mid);
             text-decoration: none;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
         .claim-link:hover {
-            border-color: #74d856;
-            color: #74d856;
+            border-color: var(--primary-green);
+            color: var(--primary-green);
         }
 
         /* Info Notice */
         .info-notice {
             background: transparent;
-            border: 1px solid #1a1a1c;
-            border-radius: 6px;
-            padding: 8px 12px;
-            margin-top: 12px;
-            font-size: 10px;
-            color: #71717a;
-            font-weight: 500;
+            border: none;
+            padding: 4px 0;
+            margin-top: 4px;
+            font-size: 9px;
+            color: var(--text-light);
+            font-weight: 400;
+            font-style: italic;
         }
 
         /* Empty State */
         .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #52525b;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
+            text-align: left;
+            padding: 32px 16px;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Last Checked */
+        .last-checked {
+            font-size: 9px;
+            color: var(--text-light);
+            font-style: italic;
+            margin-top: 0.5rem;
         }
 
         /* Utility Classes */
         .hidden { display: none; }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .slide-in {
+            animation: slideIn 0.15s ease-out;
+        }
+        .fade-out {
+            animation: fadeOut 0.15s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .receiver-row {
+                grid-template-columns: 180px 1fr auto;
+                gap: 1rem;
+            }
+            .receiver-stats {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .stats-dashboard {
+                grid-template-columns: 1fr;
+            }
+            .receiver-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .token-header {
+                flex-direction: column;
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>BAGS FEE TRACKER</h1>
-            <p class="subtitle">Real-time fee receiver monitoring</p>
+        <div class="header" style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 6V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V6L12 2Z" stroke="#22c55e" stroke-width="2" fill="none"/>
+                    <circle cx="12" cy="11" r="3" fill="#22c55e"/>
+                    <path d="M12 8V6M12 16V14M8 11H6M18 11H16" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <h1>bags<span class="highlight">track</span></h1>
+            </div>
+            <div id="liveIndicator" class="live-indicator" style="display: none;">
+                <span class="live-dot"></span>
+                <span>LIVE</span>
+            </div>
         </div>
 
-        <!-- Stats Dashboard -->
+        <!-- Stats Dashboard - Compact -->
         <div id="statsDashboard" style="display:none;" class="stats-dashboard">
             <div class="stat-card">
-                <div class="stat-icon">💰</div>
-                <div class="stat-label">Total Claimed</div>
+                <div class="stat-label">Claimed</div>
                 <div class="stat-value green" id="totalClaimed">0.00</div>
-                <div class="stat-subvalue" id="totalClaimedCount">0 claims</div>
-                <div class="stat-progress">
-                    <div class="stat-progress-bar" id="claimedProgress" style="width: 0%"></div>
-                </div>
+                <span class="stat-subvalue" id="totalClaimedCount">(0)</span>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">⏳</div>
-                <div class="stat-label">Total Unclaimed</div>
+                <div class="stat-label">Unclaimed</div>
                 <div class="stat-value yellow" id="totalUnclaimed">0.00</div>
-                <div class="stat-subvalue" id="unclaimedPercent">0% of total</div>
-                <div class="stat-progress">
-                    <div class="stat-progress-bar" id="unclaimedProgress" style="width: 0%; background: #facc15;"></div>
-                </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">📊</div>
                 <div class="stat-label">Tracking</div>
-                <div class="stat-value" id="trackingCount">0</div>
-                <div class="stat-subvalue"><span id="tokenCount">0</span> tokens • <span id="walletCount">0</span> wallets</div>
+                <div class="stat-value" id="trackingCount" style="color: var(--text-dark);">0</div>
+                <span class="stat-subvalue"><span id="tokenCount">0</span>t • <span id="walletCount">0</span>w</span>
+            </div>
+            <div style="margin-left: auto; display: flex; gap: 6px; align-items: center;">
+                <button class="live-toggle" id="liveToggleBtn" onclick="toggleLiveTracking()">
+                    <span class="toggle-dot"></span> OFF
+                </button>
+                <div class="stat-card" id="refreshCard">
+                    <div class="stat-value" id="refreshCountdown" style="color: var(--text-mid); font-size: 10px;">--</div>
+                </div>
             </div>
         </div>
 
         <div class="panel">
             <div class="panel-header">
-                <span class="panel-title">Token Search</span>
+                <span class="panel-title">Search Token</span>
             </div>
             <div class="panel-body">
                 <div class="search-section">
                     <input
                         type="text"
                         id="tokenMint"
-                        placeholder="ENTER TOKEN MINT ADDRESS"
+                        placeholder="Enter token mint address..."
                     />
-                    <button class="btn-primary" onclick="findReceivers()">FIND RECEIVERS</button>
+                    <button class="btn-primary" onclick="findReceivers()">Find</button>
                 </div>
 
                 <div id="error" style="display:none;"></div>
-                <div id="loading" style="display:none;" class="success">LOADING...</div>
+                <div id="loading" style="display:none;" class="success">Loading...</div>
                 <div id="results"></div>
             </div>
         </div>
 
         <div id="tracked" style="display:none;" class="panel">
             <div class="panel-header">
-                <span class="panel-title">Tracked Receivers</span>
-                <button class="btn-secondary" onclick="checkAllClaims()">CHECK ALL</button>
+                <span class="panel-title">Tracked</span>
+                <button class="btn-secondary" onclick="checkAllClaims()">Refresh All</button>
             </div>
             <div class="panel-body" style="padding: 0;">
                 <div id="trackedList"></div>
+                <div class="info-warning" style="margin: 8px;">
+                    <span>⚠️</span>
+                    <span>Only the last 30 transactions are checked. Older claims may be missed.</span>
+                </div>
             </div>
         </div>
     </div>
@@ -674,6 +878,14 @@
     <script>
         const BACKEND_URL = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
         let trackedTokens = JSON.parse(localStorage.getItem('trackedTokens') || '[]');
+        let autoRefreshInterval = null;
+        let countdownInterval = null;
+        let countdownSeconds = 30;
+        let liveTrackingEnabled = JSON.parse(localStorage.getItem('liveTrackingEnabled') || 'true');
+        const REFRESH_INTERVAL = 30000; // 30 seconds
+
+        // Sound for notifications
+        const notificationSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2JkZiYl46Cd3Fydnx/g4eIiIaCfXdxa2ltcXV5fYGDhISBfXhxbGdlZmhqbnJ2eXx+f39+fHl1cW1paGdnaGlrbm9xcnNzcnBubGlnZWRjY2NjZGVmaGlrbG1tb25tbGtpZ2VjYWBgYGBgYWJjZGVmZ2hoaGdnZmVkYmFgX19fX19fYGBhYmNkZGVlZWRkY2JhYF9fXl5eXl5fX2BgYWJiY2NjY2NjYmJhYWBfX19eXl5eX19fYGBhYWFhYWFhYWBgYF9fX19fXl5eXl9fX2BgYGBgYGBgYGBfX19fXl5eXl5eXl9fX19fX19fX19fX19fX19fX15eXl5eXl5eXl9fX19fX19fX19fX19fX19fX19fXl5eXl5eX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fYGBgYWJjZGVnaGlrbG1ub3BxcnJzdHR0dHR0c3NycXBvbm1samlnZmRjYWBfXl1cW1taWllZWFhYWFhYWFhZWVpbXF1eX2BiY2RmZ2hqa2xtbnBxcnN0dXV2dnd3d3d3d3Z2dXR0c3JxcG9ubWxramlnZmVjYmBfXl1cW1pZWFhXV1dXV1dXV1hYWVlaW1xdXl9gYWJkZWZnaGlqbG1ucHFyc3R1dnd4eHl5eXl5eXl5eHh3dnV0c3JxcG9tbGtqaGdmZGNhYF9eXFtaWVhXVlZWVlZWVlZXV1hYWVpbXF1eX2BhYmRlZmdoamtsbm9wcnN0dXZ3eHl6enp7e3t7e3t6enl4d3Z1dHNycG9ubWxraWhgX15dXFtaWVhXV1ZWVlZWV1dYWFlaW1xdXl9hYmNkZmdoaWtsbm9wcnN1dnd4eXp7fHx9fX19fX19fHx7enl4d3Z1dHJxcG9ubWxqaA==');
 
         window.addEventListener('load', () => {
             // Check if opened as file:// protocol
@@ -681,8 +893,186 @@
                 showError('Please open this file through a web server (localhost), not as a file. The API calls will not work from file://');
                 return;
             }
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
             updateTrackedList();
+            if (liveTrackingEnabled) {
+                startAutoRefresh();
+            }
+            updateLiveToggleUI();
         });
+
+        // Play notification sound
+        function playNotificationSound() {
+            try {
+                notificationSound.currentTime = 0;
+                notificationSound.play();
+            } catch (e) {
+                console.log('Could not play sound:', e);
+            }
+        }
+
+        // Send push notification
+        function sendPushNotification(title, body) {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: '💰',
+                    badge: '💰',
+                    tag: 'bags-tracker-claim',
+                    requireInteraction: true
+                });
+                notification.onclick = () => {
+                    window.focus();
+                    notification.close();
+                };
+            }
+        }
+
+        // Toggle live tracking
+        function toggleLiveTracking() {
+            liveTrackingEnabled = !liveTrackingEnabled;
+            localStorage.setItem('liveTrackingEnabled', JSON.stringify(liveTrackingEnabled));
+
+            if (liveTrackingEnabled) {
+                startAutoRefresh();
+                showSuccess('Live tracking ON - checking every 30s');
+                playNotificationSound(); // Confirm sound works
+            } else {
+                stopAutoRefresh();
+                showSuccess('Live tracking OFF');
+            }
+            updateLiveToggleUI();
+            updateTrackedList(); // Re-render with/without glow
+        }
+
+        function updateLiveToggleUI() {
+            const toggleBtn = document.getElementById('liveToggleBtn');
+            if (toggleBtn) {
+                if (liveTrackingEnabled && trackedTokens.length > 0) {
+                    toggleBtn.classList.add('active');
+                    toggleBtn.innerHTML = '<span class="toggle-dot"></span> LIVE';
+                } else {
+                    toggleBtn.classList.remove('active');
+                    toggleBtn.innerHTML = '<span class="toggle-dot"></span> OFF';
+                }
+            }
+        }
+
+        // Auto-refresh every 30 seconds
+        function startAutoRefresh() {
+            if (!liveTrackingEnabled) return;
+
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            if (trackedTokens.length > 0) {
+                updateLiveIndicator(true);
+                updateLiveToggleUI();
+                countdownSeconds = 30;
+                updateCountdown();
+
+                // Countdown ticker
+                countdownInterval = setInterval(() => {
+                    countdownSeconds--;
+                    if (countdownSeconds < 0) countdownSeconds = 30;
+                    updateCountdown();
+                }, 1000);
+
+                // Main refresh
+                autoRefreshInterval = setInterval(async () => {
+                    countdownSeconds = 30;
+                    await silentRefreshAll();
+                }, REFRESH_INTERVAL);
+            } else {
+                updateLiveIndicator(false);
+            }
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            updateLiveIndicator(false);
+            updateLiveToggleUI();
+            updateTrackedList(); // Re-render to remove glow
+            const countdown = document.getElementById('refreshCountdown');
+            if (countdown) countdown.textContent = '--';
+        }
+
+        function updateCountdown() {
+            const countdown = document.getElementById('refreshCountdown');
+            if (countdown) countdown.textContent = countdownSeconds + 's';
+        }
+
+        function updateLiveIndicator(isLive) {
+            // Header indicator hidden - using toggle button instead
+            const indicator = document.getElementById('liveIndicator');
+            if (indicator) {
+                indicator.style.display = 'none'; // Hidden, using toggle button
+            }
+        }
+
+        // Silent refresh - no loading indicators
+        async function silentRefreshAll() {
+            for (const token of trackedTokens) {
+                await silentCheckClaim(token.id);
+            }
+        }
+
+        async function silentCheckClaim(tokenId) {
+            const token = trackedTokens.find(t => t.id === tokenId);
+            if (!token) return;
+
+            try {
+                const claimResponse = await fetch(
+                    `${BACKEND_URL}/api/check-claim/${token.wallet}/${token.tokenMint}`
+                );
+                const claimData = await claimResponse.json();
+
+                const hadClaims = token.claimCount || 0;
+
+                token.hasClaimed = claimData.hasClaimed;
+                token.claimHistory = claimData.claimHistory || [];
+                token.totalClaimed = claimData.totalClaimed || 0;
+                token.claimCount = claimData.claimCount || 0;
+                token.lastChecked = claimData.lastChecked;
+                token.currency = claimData.currency || 'SOL';
+
+                // Fetch lifetime fees
+                try {
+                    const lifetimeResponse = await fetch(
+                        `${BACKEND_URL}/api/lifetime-fees/${token.tokenMint}`
+                    );
+                    const lifetimeData = await lifetimeResponse.json();
+                    token.lifetimeFees = lifetimeData;
+                } catch (err) {
+                    console.log('Could not fetch lifetime fees:', err);
+                }
+
+                saveTrackedTokens();
+
+                // Only update UI if something changed
+                if (token.claimCount !== hadClaims) {
+                    updateTrackedList();
+                    showSuccess(`New claim detected for @${token.username}!`);
+                    playNotificationSound();
+                    sendPushNotification('💰 New Claim Detected!', `@${token.username} made a new claim on ${token.tokenMetadata?.symbol || 'token'}`);
+                } else {
+                    // Just update the stats quietly
+                    updateStats();
+                }
+            } catch (err) {
+                console.error('Silent check failed:', err);
+            }
+        }
 
         async function findReceivers() {
             const tokenMint = document.getElementById('tokenMint').value.trim();
@@ -724,13 +1114,13 @@
                             <tr>
                                 <td>
                                     ${pfp ? `<img src="${pfp}" class="profile-img" onerror="this.style.display='none'">` : ''}
-                                    <strong><a href="https://x.com/${twitterUsername}" target="_blank" style="color: #74d856; text-decoration: none;">@${twitterUsername}</a></strong>
+                                    <strong><a href="https://x.com/${twitterUsername}" target="_blank" style="color: #22c55e; text-decoration: none;">@${twitterUsername}</a></strong>
                                 </td>
-                                <td style="font-family: Monaco, monospace; font-size: 11px; color: #71717a;">${wallet}</td>
+                                <td style="font-family: Monaco, monospace; font-size: 1.1rem; color: #6b6b6b;">${wallet}</td>
                                 <td><span class="fee-badge">${feePercentage}%</span></td>
                                 <td style="text-align: right;">
                                     <button class="btn-primary" onclick="trackCreator('${tokenMint}', '${twitterUsername}', '${wallet}', ${feePercentage}, '${pfp.replace(/'/g, "\\'")}')">
-                                        TRACK
+                                        Track
                                     </button>
                                 </td>
                             </tr>
@@ -741,10 +1131,10 @@
                 html += '</tbody></table>';
 
                 if (!foundAny) {
-                    html = `<div class="empty-state" style="padding: 60px 20px;">
-                        <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
-                        <div style="font-size: 14px; color: #d4d4d8; margin-bottom: 8px; text-transform: none;">No Fee Receivers Found</div>
-                        <div style="font-size: 11px; color: #71717a; text-transform: none; letter-spacing: normal; font-weight: 400;">
+                    html = `<div class="empty-state" style="padding: 32px 16px;">
+                        <div style="font-size: 20px; margin-bottom: 16px;">🔍</div>
+                        <div style="font-size: 14px; color: #a3a3a3; margin-bottom: 8px; text-transform: none;">No Fee Receivers Found</div>
+                        <div style="font-size: 1.1rem; color: #6b6b6b; text-transform: none; ; font-weight: 400;">
                             This token doesn't have any fee receivers configured
                         </div>
                     </div>`;
@@ -801,6 +1191,7 @@
             showSuccess(`Now tracking @${username}`);
 
             setTimeout(() => checkClaim(token.id), 1000);
+            startAutoRefresh(); // Start live tracking
         }
 
         async function checkClaim(tokenId) {
@@ -861,7 +1252,7 @@
                 element.classList.toggle('expanded');
                 const btn = document.getElementById('btn-' + tokenId);
                 if (btn) {
-                    btn.textContent = element.classList.contains('expanded') ? 'COLLAPSE' : 'VIEW CLAIMS';
+                    btn.textContent = element.classList.contains('expanded') ? 'Hide' : 'Claims';
                 }
             }
         }
@@ -921,15 +1312,12 @@
             const claimedPercent = grandTotal > 0 ? (totalClaimed / grandTotal * 100) : 0;
             const unclaimedPercent = grandTotal > 0 ? (totalUnclaimed / grandTotal * 100) : 0;
 
-            // Update dashboard
-            document.getElementById('statsDashboard').style.display = 'grid';
-            document.getElementById('totalClaimed').textContent = totalClaimed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4}) + ' SOL';
-            document.getElementById('totalClaimedCount').textContent = totalClaimCount + ' claims';
-            document.getElementById('claimedProgress').style.width = claimedPercent + '%';
+            // Update dashboard - compact format
+            document.getElementById('statsDashboard').style.display = 'flex';
+            document.getElementById('totalClaimed').textContent = totalClaimed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' SOL';
+            document.getElementById('totalClaimedCount').textContent = '(' + totalClaimCount + ')';
 
-            document.getElementById('totalUnclaimed').textContent = totalUnclaimed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4}) + ' SOL';
-            document.getElementById('unclaimedPercent').textContent = unclaimedPercent.toFixed(0) + '% of total';
-            document.getElementById('unclaimedProgress').style.width = unclaimedPercent + '%';
+            document.getElementById('totalUnclaimed').textContent = totalUnclaimed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' SOL';
 
             document.getElementById('trackingCount').textContent = trackedTokens.length;
             document.getElementById('tokenCount').textContent = uniqueTokens.size;
@@ -981,21 +1369,22 @@
                 const statusText = hasUnclaimed ? 'Active' : 'No Activity';
                 const copyBtnId = 'copy-mint-' + tokenMint.slice(0, 8);
 
-                // Token Header
+                // Token Header - Compact with glow when live
+                const glowClass = liveTrackingEnabled ? 'tracking-glow' : '';
                 html += `
-                    <div class="token-header">
+                    <div class="token-header ${glowClass}">
                         ${tokenImage ? `<img src="${tokenImage}" class="token-logo" onerror="this.style.display='none'">` : '<div class="token-logo"></div>'}
                         <div class="token-info">
                             <div class="token-ticker">${tokenSymbol}</div>
                             <div class="token-name">${tokenName}</div>
                             <div class="token-address">
                                 <span onclick="copyToClipboard('${tokenMint}', '${copyBtnId}')" style="cursor: pointer;" title="Click to copy">
-                                    ${tokenMint.slice(0, 12)}...${tokenMint.slice(-12)}
+                                    ${tokenMint.slice(0, 6)}...${tokenMint.slice(-6)}
                                 </span>
-                                <button class="copy-btn" id="${copyBtnId}" onclick="copyToClipboard('${tokenMint}', '${copyBtnId}')" style="display: none;">📋 COPY</button>
-                                <a href="https://solscan.io/token/${tokenMint}" target="_blank" style="margin-left: 6px; color: #71717a; text-decoration: none; font-size: 11px;" title="View on Solscan">🔗</a>
+                                <a href="https://solscan.io/token/${tokenMint}" target="_blank" style="margin-left: 4px; color: #6b6b6b; text-decoration: none; font-size: 10px;" title="View on Solscan">↗</a>
                             </div>
                         </div>
+                        ${liveTrackingEnabled ? '<span class="status-badge active" style="font-size: 8px;"><span class="status-dot"></span>LIVE</span>' : ''}
                         <span class="status-badge ${statusClass}">
                             <span class="status-dot"></span>
                             ${statusText}
@@ -1042,50 +1431,36 @@
                                 <div>
                                     <div class="receiver-username">
                                         <a href="https://x.com/${token.username}" target="_blank">@${token.username}</a>
-                                        <span class="status-badge ${receiverStatus}" style="margin-left: 8px; font-size: 9px; padding: 2px 6px;">
-                                            <span class="status-dot"></span>
-                                            ${receiverStatusText}
-                                        </span>
                                     </div>
                                     <div class="receiver-wallet">
                                         <span onclick="copyToClipboard('${token.wallet}', '${walletCopyId}')" style="cursor: pointer;" title="Click to copy">
-                                            ${token.wallet.slice(0, 12)}...${token.wallet.slice(-8)}
+                                            ${token.wallet.slice(0, 6)}...${token.wallet.slice(-4)}
                                         </span>
-                                        <button class="copy-btn" id="${walletCopyId}" onclick="copyToClipboard('${token.wallet}', '${walletCopyId}')" style="margin-left: 6px; padding: 2px 6px; font-size: 9px; display: none;">📋</button>
-                                        <a href="https://solscan.io/account/${token.wallet}" target="_blank" style="margin-left: 6px; color: #71717a; text-decoration: none; font-size: 11px;" title="View on Solscan">🔗</a>
+                                        <a href="https://solscan.io/account/${token.wallet}" target="_blank" style="margin-left: 4px; color: #6b6b6b; text-decoration: none; font-size: 9px;" title="View on Solscan">↗</a>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="receiver-stats">
-                                <div class="receiver-stat tooltip">
-                                    <div class="receiver-stat-label">Fee Split</div>
+                                <div class="receiver-stat">
+                                    <div class="receiver-stat-label">Fee</div>
                                     <div class="receiver-stat-value">${token.feePercentage}%</div>
-                                    <span class="tooltiptext">Percentage of fees allocated to this wallet</span>
-                                </div>
-                                <div class="receiver-stat tooltip">
-                                    <div class="receiver-stat-label">Claimed</div>
-                                    <div class="receiver-stat-value claimed">${(token.totalClaimed || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
-                                    <span class="tooltiptext">Total SOL claimed from fees</span>
-                                </div>
-                                <div class="receiver-stat tooltip">
-                                    <div class="receiver-stat-label">Unclaimed</div>
-                                    <div class="receiver-stat-value unclaimed">${unclaimedSol.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}</div>
-                                    <span class="tooltiptext">Available SOL to claim</span>
                                 </div>
                                 <div class="receiver-stat">
-                                    <div class="receiver-stat-label">Claims</div>
-                                    <div class="receiver-stat-value">${token.claimCount || 0}</div>
+                                    <div class="receiver-stat-label">Claimed</div>
+                                    <div class="receiver-stat-value claimed">${(token.totalClaimed || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                                </div>
+                                <div class="receiver-stat">
+                                    <div class="receiver-stat-label">Unclaimed</div>
+                                    <div class="receiver-stat-value unclaimed">${unclaimedSol.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
                                 </div>
                             </div>
 
-                            <div>
-                                ${token.claimHistory && token.claimHistory.length > 0 ? `<button class="btn-expand" id="btn-${token.id}" onclick="toggleClaims(${token.id})">VIEW CLAIMS</button>` : '<span style="color: #52525b; font-size: 11px;">NO CLAIMS</span>'}
-                                ${lastCheckedText ? `<div class="last-checked">Last checked: ${lastCheckedText}</div>` : ''}
+                            <div style="display: flex; gap: 4px; align-items: center;">
+                                ${token.claimHistory && token.claimHistory.length > 0 ? `<button class="btn-expand" id="btn-${token.id}" onclick="toggleClaims(${token.id})" style="padding: 4px 8px; font-size: 9px;">${token.claimCount || 0} txs</button>` : ''}
+                                <button class="btn-secondary" onclick="checkClaim(${token.id})" style="padding: 4px 8px; font-size: 9px;">↻</button>
+                                <button class="btn-danger" onclick="removeToken(${token.id})" style="padding: 4px 6px; font-size: 9px;">×</button>
                             </div>
-
-                            <button class="btn-secondary" onclick="checkClaim(${token.id})">CHECK</button>
-                            <button class="btn-danger" onclick="removeToken(${token.id})">REMOVE</button>
                         </div>
 
                         ${token.claimHistory && token.claimHistory.length > 0 ? `
@@ -1098,16 +1473,22 @@
                     if (token.claimHistory && token.claimHistory.length > 0) {
                         token.claimHistory.forEach(claim => {
                             // Handle both seconds and milliseconds timestamps
-                            const timestamp = claim.timestamp > 10000000000 ? claim.timestamp : claim.timestamp * 1000;
-                            const date = new Date(timestamp);
-                            const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
-                            const timeStr = date.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+                            let dateStr = '';
+                            let timeStr = '';
+                            if (claim.timestamp && !isNaN(claim.timestamp)) {
+                                const timestamp = claim.timestamp > 10000000000 ? claim.timestamp : claim.timestamp * 1000;
+                                const date = new Date(timestamp);
+                                if (!isNaN(date.getTime())) {
+                                    dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+                                    timeStr = date.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+                                }
+                            }
 
                             html += `
                                 <div class="claim-row">
                                     <div class="claim-amount">${claim.amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})} ${claim.currency}</div>
-                                    <div class="claim-date">${dateStr} ${timeStr}</div>
-                                    <a href="https://solscan.io/tx/${claim.signature}" target="_blank" class="claim-link">VIEW TX</a>
+                                    <div class="claim-date">${dateStr}${dateStr && timeStr ? ' ' + timeStr : ''}</div>
+                                    <a href="https://solscan.io/tx/${claim.signature}" target="_blank" class="claim-link">View</a>
                                 </div>
                             `;
                         });
@@ -1130,6 +1511,11 @@
                 saveTrackedTokens();
                 updateTrackedList();
                 showSuccess('Receiver removed');
+
+                // Stop auto-refresh if no tokens left
+                if (trackedTokens.length === 0) {
+                    stopAutoRefresh();
+                }
             }
         }
 
