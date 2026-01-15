@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bagstrack</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2L4 6V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V6L12 2Z' stroke='%2322c55e' stroke-width='2' fill='none'/%3E%3Ccircle cx='12' cy='11' r='3' fill='%2322c55e'/%3E%3Cpath d='M12 8V6M12 16V14M8 11H6M18 11H16' stroke='%2322c55e' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -141,6 +142,21 @@
             display: flex;
             align-items: center;
             gap: 6px;
+        }
+
+        /* Bags link */
+        .bags-link {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.15s;
+            opacity: 0.7;
+        }
+        .bags-link:hover {
+            opacity: 1;
+            background: rgba(34, 197, 94, 0.1);
+            transform: scale(1.1);
         }
 
         @keyframes fadeInDown {
@@ -806,7 +822,10 @@
                     <circle cx="12" cy="11" r="3" fill="#22c55e"/>
                     <path d="M12 8V6M12 16V14M8 11H6M18 11H16" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
-                <h1>bags<span class="highlight">track</span></h1>
+                <div>
+                    <h1>bags<span class="highlight">track</span></h1>
+                    <p style="font-size: 9px; color: #6b6b6b; margin-top: 2px;">Track fee claims on Bags tokens in real-time</p>
+                </div>
             </div>
             <div id="liveIndicator" class="live-indicator" style="display: none;">
                 <span class="live-dot"></span>
@@ -849,7 +868,7 @@
                     <input
                         type="text"
                         id="tokenMint"
-                        placeholder="Enter token mint address..."
+                        placeholder="Enter Bags token contract address..."
                     />
                     <button class="btn-primary" onclick="findReceivers()">Find</button>
                 </div>
@@ -872,6 +891,19 @@
                     <span>Only the last 30 transactions are checked. Older claims may be missed.</span>
                 </div>
             </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" style="margin-top: 24px; padding: 16px 0; border-top: 1px solid #2a2a2a; display: flex; justify-content: center; align-items: center; gap: 16px; font-size: 10px; color: #6b6b6b;">
+            <a href="https://bags.fm" target="_blank" style="color: #22c55e; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="#0c0c0c" font-size="10" font-weight="bold">$</text></svg>
+                bags.fm
+            </a>
+            <span>•</span>
+            <a href="https://x.com/degenvcap" target="_blank" style="color: #a3a3a3; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                @degenvcap
+            </a>
         </div>
     </div>
 
@@ -1384,6 +1416,9 @@
                                 <a href="https://solscan.io/token/${tokenMint}" target="_blank" style="margin-left: 4px; color: #6b6b6b; text-decoration: none; font-size: 10px;" title="View on Solscan">↗</a>
                             </div>
                         </div>
+                        <a href="https://bags.fm/token/${tokenMint}" target="_blank" class="bags-link" title="View on Bags">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" fill="#0c0c0c" font-size="10" font-weight="bold">$</text></svg>
+                        </a>
                         ${liveTrackingEnabled ? '<span class="status-badge active" style="font-size: 8px;"><span class="status-dot"></span>LIVE</span>' : ''}
                         <span class="status-badge ${statusClass}">
                             <span class="status-dot"></span>
